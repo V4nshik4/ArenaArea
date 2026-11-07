@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Rankings{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h2>Team rankings</h2>
+    <p>Computed view: 3 points for a win, 1 for a draw, from completed match results.</p>
+  </div>
+  <form method="get" class="search">
+    <select name="tournament_id" onchange="this.form.submit()">
+      {% for t in tournaments %}
+        <option value="{{ t.tournament_id }}" {% if t.tournament_id == tournament_id %}selected{% endif %}>{{ t.tournament_name }}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+<div class="card">
+<table>
+  <thead><tr><th>#</th><th>Team</th><th>Played</th><th>W</th><th>D</th><th>L</th><th>Points</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ r.team_name }}</td>
+      <td>{{ r.matches_played }}</td>
+      <td>{{ r.wins }}</td>
+      <td>{{ r.draws }}</td>
+      <td>{{ r.losses }}</td>
+      <td><strong>{{ r.points }}</strong></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7" class="empty">No ranking data for this tournament.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Match form{% endblock %}
+{% block content %}
+<div class="topbar"><div><h2>{{ 'Edit match' if item else 'Schedule match' }}</h2></div></div>
+<div class="card">
+<form class="stack" method="post">
+  <label>Tournament
+    <select name="tournament_id" required>
+      {% for t in tournaments %}
+        <option value="{{ t.tournament_id }}" {% if item and item.tournament_id==t.tournament_id %}selected{% endif %}>{{ t.tournament_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Team 1
+    <select name="team1_id" required>
+      {% for t in teams %}
+        <option value="{{ t.team_id }}" {% if item and item.team1_id==t.team_id %}selected{% endif %}>{{ t.team_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Team 2
+    <select name="team2_id" required>
+      {% for t in teams %}
+        <option value="{{ t.team_id }}" {% if item and item.team2_id==t.team_id %}selected{% endif %}>{{ t.team_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Venue
+    <select name="venue_id" required>
+      {% for v in venues %}
+        <option value="{{ v.venue_id }}" {% if item and item.venue_id==v.venue_id %}selected{% endif %}>{{ v.venue_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Match date &amp; time
+    <input type="datetime-local" name="match_date" required
+           value="{{ item.match_date.replace(' ', 'T')[:16] if item else '' }}">
+  </label>
+  <label>Round
+    <select name="round_name">
+      {% for s in ['Group','Quarterfinal','Semifinal','Final','Third Place'] %}
+        <option value="{{ s }}" {% if item and item.round_name==s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Status
+    <select name="status">
+      {% for s in ['Scheduled','Live','Completed','Cancelled'] %}
+        <option value="{{ s }}" {% if item and item.status==s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <div class="actions">
+    <button class="btn" type="submit">Save</button>
+    <a class="btn ghost" href="{{ url_for('matches_list') }}">Cancel</a>
+  </div>
+</form>
+</div>
+{% endblock %}

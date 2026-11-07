@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Award prize{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h2>Award prize</h2>
+    <p>{{ prize.tournament_name }} · position {{ prize.position }} · ₹{{ '%.0f'|format(prize.prize_amount) }}</p>
+  </div>
+</div>
+<div class="card">
+<form class="stack" method="post">
+  <label>Team
+    <select name="team_id" required>
+      {% for t in teams %}
+        <option value="{{ t.team_id }}">{{ t.team_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Awarded date <input type="date" name="awarded_date" required></label>
+  <div class="actions">
+    <button class="btn" type="submit">Award</button>
+    <a class="btn ghost" href="{{ url_for('prizes_list') }}">Cancel</a>
+  </div>
+</form>
+</div>
+{% endblock %}

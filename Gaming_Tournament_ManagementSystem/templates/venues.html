@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Venues{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div><h2>Venues</h2><p>Offline arenas and online platforms where matches are held.</p></div>
+  <a class="btn" href="{{ url_for('venue_new') }}">Add venue</a>
+</div>
+<div class="card">
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Location / URL</th><th>Capacity</th><th>Matches</th><th></th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td>{{ r.venue_name }}</td>
+      <td><span class="badge {{ r.venue_type }}">{{ r.venue_type }}</span></td>
+      <td>{{ r.location }}</td>
+      <td>{{ r.capacity or '—' }}</td>
+      <td>{{ r.match_count }}</td>
+      <td class="row-actions">
+        <a class="btn ghost small" href="{{ url_for('venue_edit', venue_id=r.venue_id) }}">Edit</a>
+        <form action="{{ url_for('venue_delete', venue_id=r.venue_id) }}" method="post">
+          <button class="btn danger small" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

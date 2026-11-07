@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Prizes{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div><h2>Prizes &amp; distribution</h2><p>Position-wise purse per tournament, then award to a registered team.</p></div>
+  <a class="btn" href="{{ url_for('prize_new') }}">Add prize</a>
+</div>
+<div class="card">
+<table>
+  <thead><tr><th>Tournament</th><th>Position</th><th>Amount (₹)</th><th>Description</th><th>Awarded to</th><th></th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td>{{ r.tournament_name }}</td>
+      <td>{{ r.position }}</td>
+      <td>{{ '%.0f'|format(r.prize_amount) }}</td>
+      <td>{{ r.prize_description }}</td>
+      <td>{{ r.awarded_to or 'Unassigned' }}{% if r.awarded_date %} · {{ r.awarded_date }}{% endif %}</td>
+      <td class="row-actions">
+        {% if not r.distribution_id %}
+          <a class="btn ghost small" href="{{ url_for('prize_award', prize_id=r.prize_id) }}">Award</a>
+        {% endif %}
+        <form action="{{ url_for('prize_delete', prize_id=r.prize_id) }}" method="post">
+          <button class="btn danger small" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

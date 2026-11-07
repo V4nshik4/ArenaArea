@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ArenaArea{% endblock %} · Gaming Tournament Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">☯</div>
+      <div>
+        <h1>ArenaArea</h1>
+        <p>DBMS Lab 24B15CS213</p>
+      </div>
+    </div>
+    <nav>
+      <div class="section">Overview</div>
+      <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">Dashboard</a>
+      <a href="{{ url_for('rankings') }}" class="{% if request.endpoint == 'rankings' %}active{% endif %}">Team rankings</a>
+      <a href="{{ url_for('sql_lab') }}" class="{% if request.endpoint == 'sql_lab' %}active{% endif %}">SQL lab</a>
+      <a href="{{ url_for('schema_page') }}" class="{% if request.endpoint == 'schema_page' %}active{% endif %}">ER &amp; schema</a>
+      <div class="section">Entities</div>
+      <a href="{{ url_for('players_list') }}">Players</a>
+      <a href="{{ url_for('teams_list') }}">Teams</a>
+      <a href="{{ url_for('tournaments_list') }}">Tournaments</a>
+      <a href="{{ url_for('venues_list') }}">Venues</a>
+      <a href="{{ url_for('registrations_list') }}">Registrations</a>
+      <a href="{{ url_for('matches_list') }}">Matches</a>
+      <a href="{{ url_for('results_list') }}">Results</a>
+      <a href="{{ url_for('prizes_list') }}">Prizes</a>
+    </nav>
+    <form action="{{ url_for('reset_db') }}" method="post" style="margin-top:1.4rem;padding:0 0.4rem;">
+      <button class="btn ghost small" type="submit">Reset sample data</button>
+    </form>
+  </aside>
+  <main class="main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>

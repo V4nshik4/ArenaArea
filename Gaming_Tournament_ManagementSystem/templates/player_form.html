@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Player form{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h2>{{ 'Edit player' if item else 'Add player' }}</h2>
+    <p>UNIQUE email and in-game ID, CHECK on age and role, FK to Team and mentor.</p>
+  </div>
+</div>
+<div class="card">
+<form class="stack" method="post">
+  <label>Name <input name="player_name" required value="{{ item.player_name if item else '' }}"></label>
+  <label>Email <input type="email" name="email" required value="{{ item.email if item else '' }}"></label>
+  <label>In-game ID <input name="ingame_id" required value="{{ item.ingame_id if item else '' }}"></label>
+  <label>Role
+    <select name="role">
+      {% for role in ['Captain','Member','Substitute'] %}
+        <option value="{{ role }}" {% if item and item.role==role %}selected{% endif %}>{{ role }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Age <input type="number" name="age" min="13" max="60" required value="{{ item.age if item else 18 }}"></label>
+  <label>Team
+    <select name="team_id" required>
+      {% for t in teams %}
+        <option value="{{ t.team_id }}" {% if item and item.team_id==t.team_id %}selected{% endif %}>{{ t.team_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Mentor
+    <select name="mentor_id">
+      <option value="">None</option>
+      {% for m in mentors %}
+        <option value="{{ m.player_id }}" {% if item and item.mentor_id==m.player_id %}selected{% endif %}>{{ m.player_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Join date <input type="date" name="join_date" required value="{{ item.join_date if item else '' }}"></label>
+  <div class="actions">
+    <button class="btn" type="submit">Save</button>
+    <a class="btn ghost" href="{{ url_for('players_list') }}">Cancel</a>
+  </div>
+</form>
+</div>
+{% endblock %}

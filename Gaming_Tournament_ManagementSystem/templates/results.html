@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Results{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div><h2>Results</h2><p>One result per match (UNIQUE match_id). Scores CHECK >= 0.</p></div>
+  <a class="btn" href="{{ url_for('result_new') }}">Record result</a>
+</div>
+<div class="card">
+<table>
+  <thead><tr><th>Tournament</th><th>Round</th><th>Fixture</th><th>Score</th><th>Winner</th><th></th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td>{{ r.tournament_name }}</td>
+      <td>{{ r.round_name }}</td>
+      <td>{{ r.team1 }} vs {{ r.team2 }}</td>
+      <td>{% if r.team1_score is not none %}{{ r.team1_score }}–{{ r.team2_score }}{% else %}Not recorded{% endif %}</td>
+      <td>{{ r.winner or '—' }}</td>
+      <td>
+        {% if r.team1_score is not none %}
+        <form action="{{ url_for('result_delete', match_id=r.match_id) }}" method="post">
+          <button class="btn danger small" type="submit">Clear</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

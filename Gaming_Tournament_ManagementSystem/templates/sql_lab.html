@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}SQL lab{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h2>SQL lab</h2>
+    <p>Live queries covering joins, aggregation, subqueries, views, and set operations from the synopsis.</p>
+  </div>
+</div>
+<div class="sql-layout">
+  <div class="sql-nav">
+    {% for d in demos %}
+      <a class="{% if d.id == demo.id %}active{% endif %}" href="{{ url_for('sql_lab', q=d.id) }}">
+        {{ d.title }}<br><small>{{ d.topic }}</small>
+      </a>
+    {% endfor %}
+  </div>
+  <div>
+    <div class="card">
+      <h3>{{ demo.title }}</h3>
+      <p class="empty">{{ demo.topic }}</p>
+      <pre class="sql">{{ demo.sql.strip() }}</pre>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      {% if error %}
+        <div class="flash err">{{ error }}</div>
+      {% else %}
+      <table>
+        <thead>
+          <tr>{% for c in columns %}<th>{{ c }}</th>{% endfor %}</tr>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+          <tr>{% for c in columns %}<td>{{ row[c] }}</td>{% endfor %}</tr>
+        {% else %}
+          <tr><td class="empty">No rows.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

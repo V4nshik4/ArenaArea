@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Players{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h2>Players</h2>
+    <p>Player details, team membership, and mentor (self-join).</p>
+  </div>
+  <a class="btn" href="{{ url_for('player_new') }}">Add player</a>
+</div>
+<form class="search" method="get">
+  <input name="q" value="{{ search }}" placeholder="Search name, in-game ID, or team">
+  <button class="btn" type="submit">Search</button>
+</form>
+<div class="card">
+<table>
+  <thead>
+    <tr><th>Name</th><th>In-game ID</th><th>Role</th><th>Age</th><th>Team</th><th>Mentor</th><th></th></tr>
+  </thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td>{{ r.player_name }}</td>
+      <td class="mono">{{ r.ingame_id }}</td>
+      <td><span class="badge {{ r.role }}">{{ r.role }}</span></td>
+      <td>{{ r.age }}</td>
+      <td>{{ r.team_name }}</td>
+      <td>{{ r.mentor_name or '—' }}</td>
+      <td class="row-actions">
+        <a class="btn ghost small" href="{{ url_for('player_edit', player_id=r.player_id) }}">Edit</a>
+        <form action="{{ url_for('player_delete', player_id=r.player_id) }}" method="post">
+          <button class="btn danger small" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7" class="empty">No players found.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

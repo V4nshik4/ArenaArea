@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Registration form{% endblock %}
+{% block content %}
+<div class="topbar"><div><h2>{{ 'Edit registration' if item else 'Register team' }}</h2></div></div>
+<div class="card">
+<form class="stack" method="post">
+  <label>Tournament
+    <select name="tournament_id" required>
+      {% for t in tournaments %}
+        <option value="{{ t.tournament_id }}" {% if item and item.tournament_id==t.tournament_id %}selected{% endif %}>{{ t.tournament_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Team
+    <select name="team_id" required>
+      {% for t in teams %}
+        <option value="{{ t.team_id }}" {% if item and item.team_id==t.team_id %}selected{% endif %}>{{ t.team_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Date <input type="date" name="registration_date" required value="{{ item.registration_date if item else '' }}"></label>
+  <label>Status
+    <select name="status">
+      {% for s in ['Pending','Approved','Rejected'] %}
+        <option value="{{ s }}" {% if item and item.status==s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <div class="actions">
+    <button class="btn" type="submit">Save</button>
+    <a class="btn ghost" href="{{ url_for('registrations_list') }}">Cancel</a>
+  </div>
+</form>
+</div>
+{% endblock %}

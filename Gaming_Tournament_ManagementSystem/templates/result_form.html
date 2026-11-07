@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Record result{% endblock %}
+{% block content %}
+<div class="topbar"><div><h2>Record match result</h2><p>Winner is derived from scores. Draw leaves winner empty.</p></div></div>
+<div class="card">
+{% if not matches %}
+  <p class="empty">Every open match already has a result.</p>
+{% else %}
+<form class="stack" method="post">
+  <label>Match
+    <select name="match_id" required>
+      {% for m in matches %}
+        <option value="{{ m.match_id }}">{{ m.tournament_name }} · {{ m.team1 }} vs {{ m.team2 }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Team 1 score <input type="number" name="team1_score" min="0" required value="0"></label>
+  <label>Team 2 score <input type="number" name="team2_score" min="0" required value="0"></label>
+  <label>Remarks <input name="remarks"></label>
+  <div class="actions">
+    <button class="btn" type="submit">Save result</button>
+    <a class="btn ghost" href="{{ url_for('results_list') }}">Cancel</a>
+  </div>
+</form>
+{% endif %}
+</div>
+{% endblock %}

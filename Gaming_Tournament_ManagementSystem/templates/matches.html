@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Matches{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div><h2>Matches</h2><p>Schedule, venue assignment, and CHECK(team1 <> team2).</p></div>
+  <a class="btn" href="{{ url_for('match_new') }}">Schedule match</a>
+</div>
+<div class="card">
+<table>
+  <thead><tr><th>When</th><th>Tournament</th><th>Round</th><th>Fixture</th><th>Venue</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td>{{ r.match_date }}</td>
+      <td>{{ r.tournament_name }}</td>
+      <td>{{ r.round_name }}</td>
+      <td>{{ r.team1 }} vs {{ r.team2 }}</td>
+      <td>{{ r.venue_name }}</td>
+      <td><span class="badge {{ r.status }}">{{ r.status }}</span></td>
+      <td class="row-actions">
+        <a class="btn ghost small" href="{{ url_for('match_edit', match_id=r.match_id) }}">Edit</a>
+        <form action="{{ url_for('match_delete', match_id=r.match_id) }}" method="post">
+          <button class="btn danger small" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}ER & schema{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h2>ER model, keys, and normalization</h2>
+    <p>Mapped to JIIT DBMS Lab synopsis — Gaming Tournament Management System.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Relationship flow</h3>
+  <div class="flow">Player → Team → Registration → Tournament → Match → Result</div>
+  <p class="empty">Additional: Tournament → Venue, Tournament → Prize → PrizeDistribution. Mentor is a self-relationship on Player.</p>
+</div>
+
+<div class="er" style="margin-top:1rem;">
+  <div class="entity">
+    <h3>Team</h3>
+    <ul>
+      <li>team_id PK</li>
+      <li>team_name UNIQUE</li>
+      <li>coach_name, founded_year, status</li>
+    </ul>
+  </div>
+  <div class="entity">
+    <h3>Player</h3>
+    <ul>
+      <li>player_id PK</li>
+      <li>team_id FK, mentor_id FK (self)</li>
+      <li>email UNIQUE, ingame_id UNIQUE</li>
+    </ul>
+  </div>
+  <div class="entity">
+    <h3>Tournament</h3>
+    <ul>
+      <li>tournament_id PK</li>
+      <li>name, game, dates, status</li>
+      <li>CHECK end_date >= start_date</li>
+    </ul>
+  </div>
+  <div class="entity">
+    <h3>Venue</h3>
+    <ul>
+      <li>venue_id PK</li>
+      <li>type Offline/Online</li>
+      <li>M:N with Tournament</li>
+    </ul>
+  </div>
+  <div class="entity">
+    <h3>Registration</h3>
+    <ul>
+      <li>registration_id PK</li>
+      <li>tournament_id FK, team_id FK</li>
+      <li>UNIQUE(tournament, team)</li>
+    </ul>
+  </div>
+  <div class="entity">
+    <h3>MatchEvent</h3>
+    <ul>
+      <li>match_id PK</li>
+      <li>team1_id, team2_id, venue_id FKs</li>
+      <li>CHECK team1_id <> team2_id</li>
+    </ul>
+  </div>
+  <div class="entity">
+    <h3>Result</h3>
+    <ul>
+      <li>result_id PK</li>
+      <li>match_id UNIQUE FK</li>
+      <li>winner_team_id FK, scores</li>
+    </ul>
+  </div>
+  <div class="entity">
+    <h3>Prize / Distribution</h3>
+    <ul>
+      <li>prize: tournament + position UNIQUE</li>
+      <li>distribution: prize_id UNIQUE FK</li>
+      <li>team_id FK, awarded_date</li>
+    </ul>
+  </div>
+</div>
+
+<div class="grid-2" style="margin-top:1rem;">
+  <div class="card">
+    <h3>Normalization (3NF)</h3>
+    <ul>
+      <li><strong>1NF:</strong> Atomic attributes only; no repeating player lists inside Team.</li>
+      <li><strong>2NF:</strong> Non-key attributes depend on the full primary key (composite keys such as TournamentVenue and UNIQUE(tournament, team) are fully dependent).</li>
+      <li><strong>3NF:</strong> No transitive dependency — team name is not stored on Player; prize amount is not copied onto PrizeDistribution; tournament name is not stored on Match.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Constraints used</h3>
+    <ul>
+      <li>PRIMARY KEY on every entity</li>
+      <li>FOREIGN KEY with RESTRICT / CASCADE / SET NULL</li>
+      <li>NOT NULL, UNIQUE, CHECK (age, status, scores, dates, distinct teams)</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

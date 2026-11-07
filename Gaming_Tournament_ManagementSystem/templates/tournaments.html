@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Tournaments{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div><h2>Tournaments</h2><p>Name, game, dates, and status with CHECK(end_date >= start_date).</p></div>
+  <a class="btn" href="{{ url_for('tournament_new') }}">Create tournament</a>
+</div>
+<div class="card">
+<table>
+  <thead><tr><th>Name</th><th>Game</th><th>Dates</th><th>Organizer</th><th>Max teams</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td>{{ r.tournament_name }}</td>
+      <td>{{ r.game_title }}</td>
+      <td>{{ r.start_date }} → {{ r.end_date }}</td>
+      <td>{{ r.organizer_name }}</td>
+      <td>{{ r.max_teams }}</td>
+      <td><span class="badge {{ r.status }}">{{ r.status }}</span></td>
+      <td class="row-actions">
+        <a class="btn ghost small" href="{{ url_for('tournament_edit', tournament_id=r.tournament_id) }}">Edit</a>
+        <form action="{{ url_for('tournament_delete', tournament_id=r.tournament_id) }}" method="post">
+          <button class="btn danger small" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

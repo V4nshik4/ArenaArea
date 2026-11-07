@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Tournament form{% endblock %}
+{% block content %}
+<div class="topbar"><div><h2>{{ 'Edit tournament' if item else 'Create tournament' }}</h2></div></div>
+<div class="card">
+<form class="stack" method="post">
+  <label>Name <input name="tournament_name" required value="{{ item.tournament_name if item else '' }}"></label>
+  <label>Game title <input name="game_title" required value="{{ item.game_title if item else '' }}"></label>
+  <label>Start date <input type="date" name="start_date" required value="{{ item.start_date if item else '' }}"></label>
+  <label>End date <input type="date" name="end_date" required value="{{ item.end_date if item else '' }}"></label>
+  <label>Status
+    <select name="status">
+      {% for s in ['Upcoming','Ongoing','Completed'] %}
+        <option value="{{ s }}" {% if item and item.status==s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Organizer <input name="organizer_name" required value="{{ item.organizer_name if item else '' }}"></label>
+  <label>Max teams <input type="number" name="max_teams" min="2" required value="{{ item.max_teams if item else 8 }}"></label>
+  <div class="actions">
+    <button class="btn" type="submit">Save</button>
+    <a class="btn ghost" href="{{ url_for('tournaments_list') }}">Cancel</a>
+  </div>
+</form>
+</div>
+{% endblock %}

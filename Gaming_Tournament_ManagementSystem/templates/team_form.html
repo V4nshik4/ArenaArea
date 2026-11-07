@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Team form{% endblock %}
+{% block content %}
+<div class="topbar"><div><h2>{{ 'Edit team' if item else 'Add team' }}</h2></div></div>
+<div class="card">
+<form class="stack" method="post">
+  <label>Team name <input name="team_name" required value="{{ item.team_name if item else '' }}"></label>
+  <label>Coach <input name="coach_name" required value="{{ item.coach_name if item else '' }}"></label>
+  <label>Founded year <input type="number" name="founded_year" min="2000" max="2100" required value="{{ item.founded_year if item else 2024 }}"></label>
+  <label>Status
+    <select name="status">
+      {% for s in ['Active','Inactive'] %}
+        <option value="{{ s }}" {% if item and item.status==s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <div class="actions">
+    <button class="btn" type="submit">Save</button>
+    <a class="btn ghost" href="{{ url_for('teams_list') }}">Cancel</a>
+  </div>
+</form>
+</div>
+{% endblock %}

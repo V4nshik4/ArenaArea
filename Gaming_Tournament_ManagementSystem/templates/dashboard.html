@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h2>Gaming Tournament Management System</h2>
+    <p>Centralized records for players, teams, matches, results, rankings, and prizes.</p>
+  </div>
+</div>
+
+<div class="grid-4">
+  <div class="card stat"><div class="label">Players</div><div class="value">{{ stats.players }}</div></div>
+  <div class="card stat"><div class="label">Teams</div><div class="value">{{ stats.teams }}</div></div>
+  <div class="card stat"><div class="label">Tournaments</div><div class="value">{{ stats.tournaments }}</div></div>
+  <div class="card stat"><div class="label">Matches</div><div class="value">{{ stats.matches }}</div></div>
+</div>
+
+<div class="grid-2" style="margin-top:1rem;">
+  <div class="card">
+    <h3>Recent matches</h3>
+    <table>
+      <thead><tr><th>Tournament</th><th>Fixture</th><th>Score</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for m in recent %}
+        <tr>
+          <td>{{ m.tournament_name }}</td>
+          <td>{{ m.team1 }} vs {{ m.team2 }}</td>
+          <td>{% if m.team1_score is not none %}{{ m.team1_score }}–{{ m.team2_score }}{% else %}—{% endif %}</td>
+          <td><span class="badge {{ m.status }}">{{ m.status }}</span></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="4" class="empty">No matches yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Prize pools</h3>
+    <table>
+      <thead><tr><th>Tournament</th><th>Total (₹)</th></tr></thead>
+      <tbody>
+      {% for p in prize_pool %}
+        <tr><td>{{ p.tournament_name }}</td><td>{{ '%.0f'|format(p.total) }}</td></tr>
+      {% else %}
+        <tr><td colspan="2" class="empty">No prizes defined.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Venue form{% endblock %}
+{% block content %}
+<div class="topbar"><div><h2>{{ 'Edit venue' if item else 'Add venue' }}</h2></div></div>
+<div class="card">
+<form class="stack" method="post">
+  <label>Name <input name="venue_name" required value="{{ item.venue_name if item else '' }}"></label>
+  <label>Type
+    <select name="venue_type">
+      {% for s in ['Offline','Online'] %}
+        <option value="{{ s }}" {% if item and item.venue_type==s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Location / platform URL <input name="location" required value="{{ item.location if item else '' }}"></label>
+  <label>Capacity <input type="number" name="capacity" min="1" value="{{ item.capacity if item and item.capacity else '' }}"></label>
+  <div class="actions">
+    <button class="btn" type="submit">Save</button>
+    <a class="btn ghost" href="{{ url_for('venues_list') }}">Cancel</a>
+  </div>
+</form>
+</div>
+{% endblock %}
